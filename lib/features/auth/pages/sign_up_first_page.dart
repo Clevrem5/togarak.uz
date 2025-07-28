@@ -36,14 +36,13 @@ class _SignUpFirstPageState extends State<SignUpFirstPage> {
       final name = nameContr.text.trim();
       final surname = lastNameContr.text.trim();
 
-
       final fullData = AuthModel(
         name: name,
         surname: surname,
       );
       context.push(Routes.signUp2, extra: fullData);
-
     } else {
+      context.pop();
       debugPrint("Form xatolik bilan to‘ldirilgan.");
     }
   }
@@ -139,18 +138,20 @@ class _SignUpFirstPageState extends State<SignUpFirstPage> {
                 24.verticalSpace,
                 BlocListener<AuthBloc, AuthState>(
                   listener: (context, state) {
-                    if (state.status == AuthStatus.success) {
+                    if (state is AuthAuthenticated) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           backgroundColor: Colors.green,
-                          content: Text("Muvaffaqiyatli Ro'yxatdan o'tdingiz!!!"),
+                          content: Text("Muvaffaqiyatli kirdingiz"),
                         ),
                       );
-                    } else if (state.status == AuthStatus.error) {
+                      context.go(Routes.home);
+                    } else if (state is AuthError) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("register xato")),
+                        SnackBar(
+                          content: Text(state.message),
+                        ),
                       );
-                      context.push(Routes.home); // navigatsiya
                     }
                   },
                   child: AppElevatedButton(

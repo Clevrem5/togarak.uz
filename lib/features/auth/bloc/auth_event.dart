@@ -1,16 +1,20 @@
-import 'package:togarak/data/models/auth_models/auth_model.dart';
+import '../../../data/models/auth_models/auth_model.dart';
 
-sealed class AuthEvent {}
+abstract class AuthEvent {}
 
-final class SignUpSubmitted extends AuthEvent {
-  final AuthModel data;
+class AuthSignUpRequested extends AuthEvent {
+  final AuthModel authModel;
 
-  SignUpSubmitted({required this.data});
+  AuthSignUpRequested(this.authModel);
 }
 
-final class LoginSubmitted extends AuthEvent {
+class AuthLoginRequested extends AuthEvent {
   final String phone;
   final String password;
 
-  LoginSubmitted({required this.phone, required this.password});
+  AuthLoginRequested(this.phone, this.password);
 }
+
+class AuthLogoutRequested extends AuthEvent {}
+
+class AuthCheckStatus extends AuthEvent {}

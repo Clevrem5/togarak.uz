@@ -30,9 +30,10 @@ class SignUpSecondPage extends StatelessWidget {
       final data = GoRouterState.of(context).extra as AuthModel;
       final fullData = data.copyWith(phone: phone, password: confirm);
       print("To‘liq model: ${fullData.toJson()}");
-      context.read<AuthBloc>().add(SignUpSubmitted(data: fullData));
+      context.read<AuthBloc>().add(AuthSignUpRequested(fullData));
       context.push(Routes.home);
     } else {
+      context.pop();
       debugPrint("Form xatolik bilan to‘ldirilgan.");
     }
   }
@@ -144,18 +145,20 @@ class SignUpSecondPage extends StatelessWidget {
                 24.verticalSpace,
                 BlocListener<AuthBloc, AuthState>(
                   listener: (context, state) {
-                    if (state.status == AuthStatus.success) {
+                    if (state is AuthAuthenticated) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           backgroundColor: Colors.green,
-                          content: Text("Muvaffaqiyatli Ro'yxatdan o'tdingiz!!!"),
+                          content: Text("Muvaffaqiyatli kirdingiz"),
                         ),
                       );
-                    } else if (state.status == AuthStatus.error) {
+                      context.go(Routes.home);
+                    } else if (state is AuthError) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Register2 xato")),
+                        SnackBar(
+                          content: Text(state.message),
+                        ),
                       );
-                      context.push(Routes.home); // navigatsiya
                     }
                   },
                   child: AppElevatedButton(

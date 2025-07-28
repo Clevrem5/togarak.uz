@@ -5,7 +5,7 @@ import '../network/api_servise.dart';
 
 List<SingleChildWidget> providers = [
   Provider(
-    create: (context) => ApiClient(),
+    create: (context) => ApiService(),
   ),
   Provider(
     create: (context) => AuthRepository(

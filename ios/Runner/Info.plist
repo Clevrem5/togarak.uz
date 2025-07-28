@@ -26,6 +26,15 @@
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	<key>KeychainSharing</key>
+    <true/>
+
+    <key>NSUserTrackingUsageDescription</key>
+    <string>This identifier will be used to secure your data</string>
+
+    <key>CFBundleDisplayName</key>
+    <string>SecureStorageApp</string>
+
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>

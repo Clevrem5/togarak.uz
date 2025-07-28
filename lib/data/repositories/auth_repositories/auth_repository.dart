@@ -3,7 +3,7 @@ import '../../../core/network/secure_storage.dart';
 import '../../models/auth_models/auth_model.dart';
 
 class AuthRepository {
-  final ApiClient client;
+  final ApiService client;
 
   AuthRepository({required this.client});
 
@@ -20,42 +20,43 @@ class AuthRepository {
         name: firstname,
         surname: lastName,
         phone: phone,
-        password: password!,
+        password: password,
       ),
     );
   }
 
-  Future<String> login(String login, String password) async {
+  Future<bool> login(String login, String password) async {
+    await SecureStorage.deleteToken();
+    await SecureStorage.deleteCredentials();
     try {
-      jwt = await client.login(login, password); // may throw!
-      if (jwt == null) throw Exception('Token yo‘q');
-
-      await SecureStorage.deleteCredentials();
-      await SecureStorage.deleteToken();
+      final token = await client.login(login, password);
+      jwt = token;
       await SecureStorage.saveToken(jwt!);
       await SecureStorage.saveCredentials(login, password);
-
-      return jwt!;
+      return true;
     } catch (e) {
-      throw Exception('Login xatolik: $e');
+      return false;
     }
   }
 
-  Future<void> logOut() async {
-    await SecureStorage.deleteCredentials();
+  Future<void> logout() async {
     await SecureStorage.deleteToken();
+    await SecureStorage.deleteCredentials();
+
   }
 
   Future<bool> refreshToken() async {
-    var credentials = await SecureStorage.getCredentials();
-    final phone = credentials['phone'];
-    final password = credentials['user_password'];
+    final credentials = await SecureStorage.getCredentials();
+    if (credentials['login'] == null || credentials['password'] == null) {
+      return false;
+    }
 
-    if (phone == null || password == null) return false;
-    jwt = await client.login(phone, password);
-    print('Login token: $jwt');
-    // await SecureStorage.deleteToken();
-    await SecureStorage.saveToken(jwt!);
-    return true;
+    try {
+      jwt = await client.login(credentials['login']!, credentials['password']!);
+      await SecureStorage.saveToken(jwt!);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }
