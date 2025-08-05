@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:togarak/core/widgets/app_text.dart';
+import 'package:togarak/core/exports.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

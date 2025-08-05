@@ -20,15 +20,19 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.togarak"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        manifestPlaceholders.putAll(
+            mutableMapOf(
+                "appAuthRedirectScheme" to "com.googleusercontent.apps.636617091268-fduv9skas60e3caldd86ll5q960fhv5b"
+            )
+        )
     }
+
 
     buildTypes {
         release {

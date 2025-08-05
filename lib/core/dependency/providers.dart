@@ -1,9 +1,7 @@
-import 'package:provider/provider.dart';
-import 'package:provider/single_child_widget.dart';
-import '../../data/repositories/auth_repositories/auth_repository.dart';
-import '../network/api_servise.dart';
 
-List<SingleChildWidget> providers = [
+import 'package:togarak/core/exports.dart';
+
+var providers = <SingleChildWidget>[
   Provider(
     create: (context) => ApiService(),
   ),

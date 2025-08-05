@@ -1,5 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+
 class SecureStorage {
   static const _storage = FlutterSecureStorage();
   static const _tokenKey = 'token';
@@ -12,7 +13,6 @@ class SecureStorage {
 
   static Future<void> deleteToken() async {
     await _storage.delete(key: _tokenKey);
-    print("Token o'chirildi");
   }
 
   static Future<void> saveCredentials(String login, String password) async {
@@ -23,12 +23,13 @@ class SecureStorage {
   static Future<void> deleteCredentials() async {
     await _storage.delete(key: _loginKey);
     await _storage.delete(key: _passwordKey);
-    print("Login va parol o'chirildi");
   }
 
   static Future<String?> readToken() async {
     return await _storage.read(key: _tokenKey);
-  } static Future<Map<String, String?>> getCredentials() async {
+  }
+
+  static Future<Map<String, String?>> getCredentials() async {
     final login = await _storage.read(key: _loginKey);
     final password = await _storage.read(key: _passwordKey);
     return {
@@ -36,10 +37,4 @@ class SecureStorage {
       'password': password,
     };
   }
-
-
-
-
 }
-
-

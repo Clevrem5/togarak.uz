@@ -1,18 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
-import 'package:togarak/data/models/auth_models/auth_model.dart';
-import 'package:togarak/features/auth/bloc/auth_bloc.dart';
-import 'package:togarak/features/auth/bloc/auth_state.dart';
-
-import '../../../core/navigation/routes.dart';
-import '../../../core/utils/app_colors.dart';
-import '../../../core/widgets/app_elevated_button.dart';
-import '../../../core/widgets/app_text.dart';
-import '../../../core/widgets/app_text_form_field.dart';
-import '../widgets/selector_login.dart';
+import 'package:togarak/core/exports.dart';
 
 class SignUpFirstPage extends StatefulWidget {
   const SignUpFirstPage({super.key});
@@ -23,28 +9,31 @@ class SignUpFirstPage extends StatefulWidget {
 
 class _SignUpFirstPageState extends State<SignUpFirstPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   final TextEditingController nameContr = TextEditingController();
   final TextEditingController lastNameContr = TextEditingController();
 
   bool isChecked = false;
 
   void _submitForm(BuildContext context) {
-    if (_formKey.currentState!.validate()) {
-      debugPrint(nameContr.text);
-      debugPrint(lastNameContr.text);
-      final name = nameContr.text.trim();
-      final surname = lastNameContr.text.trim();
-
-      final fullData = AuthModel(
-        name: name,
-        surname: surname,
-      );
-      context.push(Routes.signUp2, extra: fullData);
-    } else {
-      context.pop();
+    if (!_formKey.currentState!.validate()) {
       debugPrint("Form xatolik bilan to‘ldirilgan.");
+      return;
     }
+
+    if (!isChecked) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Iltimos, maxfiylik siyosatiga rozilik bildiring."),
+        ),
+      );
+      return;
+    }
+
+    final name = nameContr.text.trim();
+    final surname = lastNameContr.text.trim();
+
+    final fullData = AuthModel(name: name, surname: surname);
+    context.push(Routes.signUp2, extra: fullData);
   }
 
   @override
@@ -117,7 +106,7 @@ class _SignUpFirstPageState extends State<SignUpFirstPage> {
                       6.verticalSpace,
                       CheckboxListTile(
                         title: const AppText(
-                          title: "Maxfiylik siyosatiga rozilik",
+                          title: "Maxfiylik siyosatiga roziman",
                           weight: FontWeight.w500,
                           color: AppColors.greyTextColor,
                         ),
@@ -161,11 +150,11 @@ class _SignUpFirstPageState extends State<SignUpFirstPage> {
                   ),
                 ),
                 47.verticalSpace,
-                Row(
+                const Row(
                   children: <Widget>[
                     Expanded(
                       child: Divider(
-                        color: const Color(0xFFE5E5E5),
+                        color: Color(0xFFE5E5E5),
                         thickness: 1,
                         endIndent: 30,
                       ),
@@ -176,7 +165,7 @@ class _SignUpFirstPageState extends State<SignUpFirstPage> {
                     ),
                     Expanded(
                       child: Divider(
-                        color: const Color(0xFFE5E5E5),
+                        color: Color(0xFFE5E5E5),
                         thickness: 1,
                         indent: 30,
                       ),
@@ -184,22 +173,29 @@ class _SignUpFirstPageState extends State<SignUpFirstPage> {
                   ],
                 ),
                 16.verticalSpace,
-                AppElevatedButton(
-                  onPressed: () {},
-                  backgroundColor: Colors.white,
-                  foregroundColor: AppColors.darkColor,
-                  text: "Google orqali kirish",
-                  leadIcon: SvgPicture.asset(
-                    'assets/icons/google.svg',
-                    width: 20.w,
-                    height: 20.h,
-                  ),
+                BlocBuilder<AuthBloc, AuthState>(
+                  builder: (context, state) {
+                    final isLoading = state is AuthLoading;
+                    return AppElevatedButton(
+                      onPressed: () {
+                        context.read<AuthBloc>().add(GoogleSignInRequest());
+                      },
+                      backgroundColor: Colors.white,
+                      foregroundColor: AppColors.darkColor,
+                      text: isLoading ? "Yuklanmoqda..." : "Google orqali kirish",
+                      leadIcon: SvgPicture.asset(
+                        AppIcons.google,
+                        width: 20.w,
+                        height: 20.h,
+                      ),
+                    );
+                  },
                 ),
                 16.verticalSpace,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    AppText(
+                    const AppText(
                       title: "Allaqachon akkauntingiz bormi?",
                       size: 14,
                       color: AppColors.greyTextColor,
@@ -208,7 +204,7 @@ class _SignUpFirstPageState extends State<SignUpFirstPage> {
                       onTap: () {
                         context.push(Routes.login);
                       },
-                      child: AppText(
+                      child: const AppText(
                         title: "Kirish",
                         color: AppColors.darkColor,
                         weight: FontWeight.w500,

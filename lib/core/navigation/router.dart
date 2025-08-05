@@ -1,12 +1,8 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:togarak/core/navigation/routes.dart';
-import 'package:togarak/features/auth/bloc/auth_bloc.dart';
-import 'package:togarak/features/auth/pages/login_page.dart';
-import 'package:togarak/features/auth/pages/sign_up_first_page.dart';
-import 'package:togarak/features/auth/pages/sign_up_second_page.dart';
-import 'package:togarak/features/home/pages/home_page.dart';
-import 'package:togarak/main.dart';
+import 'package:togarak/core/exports.dart';
+import 'package:togarak/features/home/presentation/pages/main_scaffold.dart';
+import 'package:togarak/features/oilam/presentation/pages/oilam_page.dart';
+import 'package:togarak/features/profile/presentation/pages/profile_page.dart';
+import 'package:togarak/features/togaraklarim/presentation/pages/togarak_page.dart';
 
 class AppRouter {
   static final GoRouter routes = GoRouter(
@@ -25,16 +21,13 @@ class AppRouter {
       GoRoute(
         path: Routes.signUp1,
         builder: (context, state) => BlocProvider(
-          create: (context) =>AuthBloc(
+          create: (context) => AuthBloc(
             repository: context.read(),
           ),
           child: SignUpFirstPage(),
         ),
       ),
-      GoRoute(
-        path: Routes.home,
-        builder: (context, state) => HomePage(),
-      ),
+
       GoRoute(
         path: Routes.signUp2,
         builder: (context, state) => BlocProvider(
@@ -44,6 +37,28 @@ class AppRouter {
           child: SignUpSecondPage(),
         ),
       ),
+      ShellRoute(
+        builder: (context, state, child) => MainScaffold(child: child),
+        routes: [
+          GoRoute(
+            path: Routes.home,
+            builder: (context, state) => HomePage(),
+          ),
+          GoRoute(
+            path: Routes.togaraklar,
+            builder: (context, state) => TogarakPage(),
+          ),
+          GoRoute(
+            path: Routes.oilam,
+            builder: (context, state) => OilamPage(),
+          ),
+          GoRoute(
+            path: Routes.profile,
+            builder: (context, state) => ProfilePage(),
+          ),
+        ],
+      ),
+      
     ],
   );
 }

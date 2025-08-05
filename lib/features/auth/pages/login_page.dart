@@ -1,30 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
+import 'package:togarak/core/exports.dart';
 
-import '../../../core/navigation/routes.dart';
-import '../../../core/network/secure_storage.dart';
-import '../../../core/utils/app_colors.dart';
-import '../../../core/widgets/app_elevated_button.dart';
-import '../../../core/widgets/app_text.dart';
-import '../../../core/widgets/app_text_form_field.dart';
-import '../bloc/auth_bloc.dart';
-import '../bloc/auth_event.dart';
-import '../bloc/auth_state.dart';
-import '../widgets/selector_login.dart';
-
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final TextEditingController phoneController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
 
   void _submitForm(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      final phone = phoneController.text.trim();
+      final phone = phoneController.text.trim().replaceAll('+', '');
       final password = passwordController.text.trim();
 
       context.read<AuthBloc>().add(
@@ -107,6 +99,8 @@ class LoginPage extends StatelessWidget {
                             hint: "Telefon raqam",
                             icon: Icons.phone_outlined,
                             inputType: TextInputType.phone,
+                            addUzbekPrefix: true,
+
                           ),
                           AppTextFormField(
                             controller: passwordController,
@@ -141,16 +135,9 @@ class LoginPage extends StatelessWidget {
                     Column(
                       children: [
                         AppElevatedButton(
-                          onPressed: ()  => _submitForm(context),
+                          onPressed: () => _submitForm(context),
                           text: isLoading ? "Yuklanmoqda..." : "Kirish",
                           foregroundColor: Colors.white,
-                        ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            final token = await SecureStorage.readToken();
-                            debugPrint("🎯 Token (UIdan): $token");
-                          },
-                          child: const Text("Tokenni ko‘r"),
                         ),
                       ],
                     ),
@@ -180,17 +167,18 @@ class LoginPage extends StatelessWidget {
                     16.verticalSpace,
                     AppElevatedButton(
                       onPressed: () {
-                        context.push(Routes.signUp2);
+                        context.read<AuthBloc>().add(GoogleSignInRequest());
                       },
                       backgroundColor: Colors.white,
                       foregroundColor: AppColors.darkColor,
-                      text: "Google orqali kirish",
+                      text: isLoading ? "Yuklanmoqda..." : "Google orqali kirish",
                       leadIcon: SvgPicture.asset(
-                        'assets/icons/google.svg',
+                        AppIcons.google,
                         width: 20.w,
                         height: 20.h,
                       ),
                     ),
+
                     16.verticalSpace,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

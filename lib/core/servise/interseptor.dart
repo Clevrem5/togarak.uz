@@ -1,11 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:togarak/core/network/secure_storage.dart';
-
+import 'package:togarak/core/exports.dart';
 import '../../data/repositories/auth_repositories/auth_repository.dart';
-import '../../main.dart';
-import '../navigation/routes.dart';
+
 
 class AuthInterceptor extends Interceptor {
   @override

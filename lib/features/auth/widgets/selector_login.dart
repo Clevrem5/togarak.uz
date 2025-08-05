@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:togarak/core/utils/app_colors.dart';
 
+import '../../../core/utils/app_Icons.dart';
+
 class LanguageSelector extends StatefulWidget {
   const LanguageSelector({super.key});
 
@@ -20,9 +22,9 @@ class _LanguageSelectorState extends State<LanguageSelector> {
   };
 
   final Map<String, String> flags = {
-    'uz': 'assets/icons/uzbek.svg',
-    'en': 'assets/icons/english.svg',
-    'ru': 'assets/icons/russian.svg',
+    'uz': AppIcons.uzbek,
+    'en': AppIcons.english,
+    'ru': AppIcons.russian,
   };
 
   @override

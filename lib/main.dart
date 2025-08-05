@@ -1,18 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import 'package:togarak/core/dependency/providers.dart';
-import 'package:togarak/core/navigation/router.dart';
-import 'core/utils/app_colors.dart';
+
+import 'package:togarak/core/exports.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
-void main()  {
-
+void main() async {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await di.init();
   runApp(MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

@@ -1,9 +1,5 @@
-import "package:flutter/material.dart";
-import "package:flutter/services.dart";
-import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:google_fonts/google_fonts.dart";
-
-import "../utils/app_colors.dart";
+import 'package:flutter/services.dart';
+import 'package:togarak/core/exports.dart';
 
 class AppTextFormField extends StatefulWidget {
   const AppTextFormField({
@@ -19,6 +15,7 @@ class AppTextFormField extends StatefulWidget {
     this.minLines = 1,
     this.enableObscureToggleForNumbers = false,
     this.isHintAsteriskRed = false,
+    this.addUzbekPrefix = false, // ✅ Yangi parametr
   });
 
   final TextEditingController controller;
@@ -31,9 +28,8 @@ class AppTextFormField extends StatefulWidget {
   final int? maxLines;
   final int? minLines;
   final bool enableObscureToggleForNumbers;
-
-  /// Agar true bo‘lsa, hint oxiridagi yulduzcha (*) qizil bo‘ladi
   final bool isHintAsteriskRed;
+  final bool addUzbekPrefix; // ✅ Yangi parametr
 
   @override
   State<AppTextFormField> createState() => _AppTextFormFieldState();
@@ -49,6 +45,11 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
     super.initState();
     _obscureText = widget.isObscure || widget.enableObscureToggleForNumbers;
     _focusNode = FocusNode();
+
+    // ✅ Agar addUzbekPrefix true bo‘lsa, boshlanishiga +998 qo‘shamiz
+    if (widget.addUzbekPrefix && !widget.controller.text.startsWith('+998')) {
+      widget.controller.text = '+998';
+    }
 
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) {
@@ -76,7 +77,6 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
     });
   }
 
-  /// Hint matnini yoki error matnini shakllantiradi
   Widget _buildHintOrError() {
     if (_errorText != null) {
       return Text(
@@ -89,7 +89,6 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
       );
     }
 
-    // Agar hint oxirida * bo‘lsa va uni qizil qilish kerak bo‘lsa
     if (widget.isHintAsteriskRed && widget.hint.trim().endsWith("*")) {
       final text = widget.hint.trim();
       final main = text.substring(0, text.length - 1);
@@ -125,17 +124,13 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
   Widget build(BuildContext context) {
     final bool isPhoneField = widget.inputType == TextInputType.phone;
 
+    // ✅ Telefon validator — 9 ta raqam bo‘lishi kerak
     final validator = widget.validator ??
-        (isPhoneField
+        (isPhoneField && widget.addUzbekPrefix
             ? (value) {
           final cleaned = value?.replaceAll(RegExp(r'\D'), '');
-          final uzbekPhoneRegex = RegExp(r'^(998\d{9})$');
-
-          if (value == null || value.isEmpty) {
-            return 'Iltimos, raqamni kiriting';
-          }
-          if (!uzbekPhoneRegex.hasMatch(cleaned!)) {
-            return '998 bilan boshlanuvchi 12 xonali raqam';
+          if (value == null || value.isEmpty || cleaned!.length != 12) {
+            return "To‘liq telefon raqam kiriting";
           }
           return null;
         }
@@ -150,7 +145,12 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
         keyboardType: widget.inputType,
         maxLines: widget.maxLines,
         minLines: widget.minLines,
-        inputFormatters: isPhoneField ? [FilteringTextInputFormatter.digitsOnly] : [],
+
+        // ✅ Yangi formatlash
+        inputFormatters: widget.addUzbekPrefix
+            ? [PhoneNumberFormatter()] // Custom formatter
+            : (isPhoneField ? [FilteringTextInputFormatter.digitsOnly] : []),
+
         style: GoogleFonts.manrope(
           fontWeight: FontWeight.w500,
           fontSize: 16.sp,
@@ -193,7 +193,7 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
             onPressed: _toggleObscure,
           )
               : null,
-          label: _buildHintOrError(), // labelga RichText yoki error beramiz
+          label: _buildHintOrError(),
         ),
         onChanged: (value) {
           widget.onChanged?.call(value);
@@ -211,6 +211,42 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
           return null;
         },
       ),
+    );
+  }
+}
+
+
+class PhoneNumberFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue,
+      TextEditingValue newValue,
+      ) {
+    String newText = newValue.text;
+
+    // +998 bilan boshlanmagan bo‘lsa, avtomatik qo‘shamiz
+    if (!newText.startsWith('+998')) {
+      newText = '+998' + newText.replaceAll(RegExp(r'\D'), '');
+    }
+
+    // Faqat raqamlar va +998 boshida bo‘lishi kerak
+    String digitsOnly = newText.replaceAll(RegExp(r'\D'), '');
+
+    // +998 ni saqlab qolamiz, faqat 9 ta raqam qoldiramiz
+    String result = '+998';
+
+    if (digitsOnly.length > 3) {
+      // 3 dan keyingi raqamlar — ya'ni +998 dan keyin keladigan 9 ta raqam
+      String phoneDigits = digitsOnly.substring(3);
+      if (phoneDigits.length > 9) {
+        phoneDigits = phoneDigits.substring(0, 9);
+      }
+      result += phoneDigits;
+    }
+
+    return TextEditingValue(
+      text: result,
+      selection: TextSelection.collapsed(offset: result.length),
     );
   }
 }

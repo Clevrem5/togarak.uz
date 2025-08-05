@@ -1,5 +1,7 @@
-import 'package:togarak/core/network/api_servise.dart';
-import '../../../core/network/secure_storage.dart';
+import 'package:togarak/core/servise/api_servise.dart';
+import 'package:togarak/data/models/auth_models/user_model.dart';
+
+import '../../../core/servise/secure_storage.dart';
 import '../../models/auth_models/auth_model.dart';
 
 class AuthRepository {
@@ -28,7 +30,9 @@ class AuthRepository {
   Future<bool> login(String login, String password) async {
     await SecureStorage.deleteToken();
     await SecureStorage.deleteCredentials();
+    print("xolati repo ");
     try {
+      print("xolati fsfsdfs");
       final token = await client.login(login, password);
       jwt = token;
       await SecureStorage.saveToken(jwt!);
@@ -39,10 +43,15 @@ class AuthRepository {
     }
   }
 
+  Future<String> registerGoogle(UserModel user) async {
+    final token = await client.registerWithEmail(user.toQuery());
+    await SecureStorage.saveToken(token);
+    return token;
+  }
+
   Future<void> logout() async {
     await SecureStorage.deleteToken();
     await SecureStorage.deleteCredentials();
-
   }
 
   Future<bool> refreshToken() async {
