@@ -7,7 +7,7 @@ import 'package:togarak/features/togaraklarim/presentation/pages/togarak_page.da
 class AppRouter {
   static final GoRouter routes = GoRouter(
     navigatorKey: navigatorKey,
-    initialLocation: Routes.signUp1,
+    initialLocation: Routes.profile,
     routes: [
       GoRoute(
         path: Routes.login,

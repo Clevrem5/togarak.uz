@@ -19,6 +19,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthLogoutRequested>(_onLogoutRequested);
     on<AuthCheckStatus>(_onCheckStatus);
     on<GoogleSignInRequest>(_google);
+
   }
 
   Future<void> _onSignUpRequested(AuthSignUpRequested event, Emitter<AuthState> emit) async {

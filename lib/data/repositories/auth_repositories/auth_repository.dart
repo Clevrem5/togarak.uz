@@ -28,15 +28,15 @@ class AuthRepository {
   }
 
   Future<bool> login(String login, String password) async {
-    await SecureStorage.deleteToken();
-    await SecureStorage.deleteCredentials();
-    print("xolati repo ");
+
     try {
-      print("xolati fsfsdfs");
       final token = await client.login(login, password);
       jwt = token;
+      await SecureStorage.deleteToken();
+      await SecureStorage.deleteCredentials();
       await SecureStorage.saveToken(jwt!);
       await SecureStorage.saveCredentials(login, password);
+      print("hdsbhbfuhebfefiebf:$jwt");
       return true;
     } catch (e) {
       return false;

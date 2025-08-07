@@ -1,4 +1,3 @@
-
 import 'package:togarak/core/exports.dart';
 
 var providers = <SingleChildWidget>[
@@ -10,5 +9,7 @@ var providers = <SingleChildWidget>[
       client: context.read(),
     ),
   ),
-
+  BlocProvider(
+    create: (context) => AuthBloc(repository: context.read()),
+  ),
 ];

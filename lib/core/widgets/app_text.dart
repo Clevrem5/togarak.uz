@@ -11,7 +11,8 @@ class AppText extends StatelessWidget {
     this.height = 1.4,
     this.textAlign = TextAlign.start,
     this.soft = false,
-    this.decor=TextDecoration.none,
+    this.decor = TextDecoration.none,
+    this.isGirloy=false,
   });
 
   final String title;
@@ -22,6 +23,7 @@ class AppText extends StatelessWidget {
   final double height;
   final TextAlign textAlign;
   final bool soft;
+  final bool? isGirloy;
   final TextDecoration decor;
 
   @override
@@ -32,13 +34,20 @@ class AppText extends StatelessWidget {
       maxLines: maxLine,
       textAlign: textAlign,
       overflow: TextOverflow.ellipsis,
-      style: GoogleFonts.manrope(
+      style: isGirloy == false ? GoogleFonts.manrope(
         fontSize: size.sp,
         fontWeight: weight,
         height: height,
         decoration: decor,
         color: color,
-      ),
+      ):TextStyle(
+        fontSize: size.sp,
+        fontWeight: weight,
+        height: height,
+        decoration: decor,
+        color: color,
+        fontFamily: 'Gilroy',
+      )
     );
   }
 }
