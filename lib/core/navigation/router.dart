@@ -2,12 +2,13 @@ import 'package:togarak/core/exports.dart';
 import 'package:togarak/features/home/presentation/pages/main_scaffold.dart';
 import 'package:togarak/features/oilam/presentation/pages/oilam_page.dart';
 import 'package:togarak/features/profile/presentation/pages/profile_page.dart';
+import 'package:togarak/features/splash/pages/splash_screen.dart';
 import 'package:togarak/features/togaraklarim/presentation/pages/togarak_page.dart';
 
 class AppRouter {
   static final GoRouter routes = GoRouter(
     navigatorKey: navigatorKey,
-    initialLocation: Routes.profile,
+    initialLocation: Routes.splash,
     routes: [
       GoRoute(
         path: Routes.login,
@@ -58,7 +59,10 @@ class AppRouter {
           ),
         ],
       ),
-      
+      GoRoute(
+        path: Routes.splash,
+        builder: (context, state) => SplashScreen(),
+      ),
     ],
   );
 }

@@ -21,7 +21,7 @@ class ProfilePageAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 21),
+      padding: const EdgeInsets.only(top: 12),
       child: AppBar(
         leadingWidth: 150,
         backgroundColor: Colors.white,

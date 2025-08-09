@@ -100,6 +100,7 @@ class AppElevatedButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ButtonStyle(
+        alignment: Alignment.center,
         backgroundColor: MaterialStateProperty.all(bgColor),
         foregroundColor: MaterialStateProperty.all(fgColor),
         minimumSize: MaterialStateProperty.all(Size((width ?? 335).w, (height ?? 48).h)),

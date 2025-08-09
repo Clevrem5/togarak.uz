@@ -6,4 +6,5 @@ class Routes {
   static const String profile="/profile";
   static const String togaraklar="/togarak";
   static const String oilam="/oilam";
+  static const String splash="/splash";
 }

@@ -1,6 +1,10 @@
 import 'package:togarak/core/exports.dart';
-import 'package:togarak/features/profile/presentation/pages/app_text_field.dart';
+import 'package:togarak/core/widgets/app_text_field.dart';
+import 'package:togarak/features/profile/presentation/widgets/profile_page_image_user_part.dart';
+import 'package:togarak/features/profile/presentation/widgets/profile_page_log_out_and_reset_password_part.dart';
+import 'package:togarak/features/profile/presentation/widgets/profile_page_state_edit_part.dart';
 
+import '../../../../core/utils/app_images.dart';
 import '../widgets/profile_page_app_bar.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -22,6 +26,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      //70
       appBar: ProfilePageAppBar(
         settingCall: () {},
         notificationCall: () {},
@@ -32,98 +37,43 @@ class _ProfilePageState extends State<ProfilePage> {
           SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: 19.w),
             sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                SizedBox(height: 20.h),
-                //  Search Field
-                AdvancedAppTextField(
-                  controller: search,
-                  hint: 'Izlash',
-                  prefixIcon: Icons.search_sharp,
-                ),
-                10.verticalSpace,
-                // image
-                Container(
-                  width: 336.w,
-                  height: 104.h,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16.r),
-                    border: BoxBorder.all(color: AppColors.storkeColor, width: 1),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.storkeColor,
-                        blurRadius: 1,
-                        spreadRadius: 1,
-                      ),
-                    ],
+              delegate: SliverChildListDelegate(
+                [
+                  20.verticalSpace,
+                  //  Search Field
+                  //48
+                  AdvancedAppTextField(
+                    controller: search,
+                    hint: 'Izlash',
+                    prefixIcon: Icons.search_sharp,
                   ),
-                ),
-                8.verticalSpace,
-                // malumotlar taxrirlash
-                Container(
-                  width: 336.w,
-                  height: 221.h,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16.r),
-                    border: BoxBorder.all(color: AppColors.storkeColor, width: 1),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.storkeColor,
-                        blurRadius: 1,
-                        spreadRadius: 1,
-                      ),
-                    ],
+                  10.verticalSpace,
+                  // image user 104
+                  ProfilePageImageUserPart(
+                    share: () {},
+                    delete: () {},
+                    image: AppImages.profile,
                   ),
-                ),
-                8.verticalSpace,
-                // parol va chiqish
-                Container(
-                  width: 336.w,
-                  height: 142.h,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16.r),
-                    border: BoxBorder.all(color: AppColors.storkeColor, width: 1),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.storkeColor,
-                        blurRadius: 1,
-                        spreadRadius: 1,
-                      ),
-                    ],
+                  8.verticalSpace,
+                  // malumotlar taxrirlash  230
+                  ProfilePageStateEditPart(
+                    callback: () {},
+                    name: null,
+                    surname: null,
+                    birtData: null,
+                    number: null,
+                    gender: null,
+                    email: null,
                   ),
-                  child: Column(
-                    children: [
-                      AppText(title: "title"),
-                      Container(),
-                      AppElevatedButton(
-                        onPressed: () {
-                          // context.read<AuthBloc>().add(AuthLogoutRequested());
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: AppText(
-                                title: "Chiqdingiz",
-                                color: Colors.white,
-                              ),
-                            ),
-                          );
-                        },
-                        icon: Icons.logout_rounded,
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.red,
-                        child: AppText(
-                          title: "Chiqish",
-                          color: Colors.red,
-                          size: 12,
-                          weight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
+                  8.verticalSpace,
+                  // parol va chiqish
+                  ProfilePageLogOutAndResetPasswordPart(
+                    resetPassword: () {},
+                    logOut: () {},
                   ),
-                ),
-                22.verticalSpace,
-              ]),
+                  22.verticalSpace,
+                ],
+              ),
             ),
           ),
         ],
